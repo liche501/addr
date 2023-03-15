@@ -89,8 +89,7 @@ func Smart(str string) *Address {
 	Parse(&info)
 	if info.Region != "" && strings.Contains(info.Address, info.Region) {
 		info.Street = info.Address[strings.LastIndex(info.Address, info.Region)+len(info.Region):]
-	}
-	if info.City != "" && strings.Contains(info.Address, info.City) {
+	} else if info.City != "" && strings.Contains(info.Address, info.City) {
 		info.Street = info.Address[strings.LastIndex(info.Address, info.City)+len(info.City):]
 	}
 
@@ -115,7 +114,7 @@ func Parse(address *Address) *Address {
 I:
 	for _, r := range rArr {
 		reg := regexp.MustCompile(`\s+`)
-    r = strings.TrimSpace(reg.ReplaceAllString(r, ""))
+		r = strings.TrimSpace(reg.ReplaceAllString(r, ""))
 		if r1, ok := areaMap.RegionByName[r]; ok && len(r1) == 1 {
 			address.Region = r1[0].Name
 			address.PostCode = strconv.Itoa(r1[0].Zipcode)
@@ -131,9 +130,9 @@ I:
 					// if address.City == v {
 					// 	break I
 					// }
-					 if strings.Contains(v, address.City) {
-            break I
-          }
+					if strings.Contains(v, address.City) {
+						break I
+					}
 				}
 			}
 		}
