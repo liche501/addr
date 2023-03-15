@@ -114,20 +114,26 @@ func Parse(address *Address) *Address {
 	// 处理区县级
 I:
 	for _, r := range rArr {
+		reg := regexp.MustCompile(`\s+`)
+    r = strings.TrimSpace(reg.ReplaceAllString(r, ""))
 		if r1, ok := areaMap.RegionByName[r]; ok && len(r1) == 1 {
 			address.Region = r1[0].Name
 			address.PostCode = strconv.Itoa(r1[0].Zipcode)
 			getAddressById(address, r1[0].Pid, city)
 			break
 		} else if ok {
-			for _, r2 := range r1 {
+			for idx1, r2 := range r1 {
 				address.Region = r2.Name
-				address.PostCode = strconv.Itoa(r1[0].Zipcode)
+				// address.PostCode = strconv.Itoa(r1[0].Zipcode)
+				address.PostCode = strconv.Itoa(r1[idx1].Zipcode)
 				getAddressById(address, r2.Pid, city)
 				for _, v := range cArr {
-					if address.City == v {
-						break I
-					}
+					// if address.City == v {
+					// 	break I
+					// }
+					 if strings.Contains(v, address.City) {
+            break I
+          }
 				}
 			}
 		}
